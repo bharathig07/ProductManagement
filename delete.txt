@@ -1,0 +1,33 @@
+package productmanagement;
+import java.util.Scanner;
+import java.sql.*;
+
+	 class deletepgm
+	 {
+		 String Name;
+		 Scanner s= new Scanner(System.in);
+		 
+		 void admindetails()
+		 {
+			try{
+		 
+			 System.out.println("Enter your Name:");
+			 Name=s.next();
+			 Connection c= DriverManager.getConnection("jdbc:mysql://localhost:3306/productmanagement","root","");
+	         PreparedStatement p=c.prepareStatement("delete from admindetails where name=?");
+	         p.setString(1,Name);
+	         int r=p.executeUpdate();
+	         System.out.println(r>0?"data delete":"not delete");
+	        
+	     }
+			  catch(Exception e)
+			  {
+				  System.out.println(e);
+			  }
+	 }
+	public static void main(String[] args) 
+	{
+		deletepgm d= new deletepgm();
+		d.admindetails();
+
+	}

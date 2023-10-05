@@ -1,0 +1,52 @@
+package productmanagement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.util.Scanner;
+ public class app
+ {
+		    String Name,Emailid,location;
+		    long contactno;
+       void userdata() 
+		 {
+		    try{
+		           Scanner s=new Scanner(System.in);
+		           System.out.println("Enter your name:");
+		           Name=s.next();
+		           
+		           System.out.println("Enter your contactno:");
+		           contactno=s.nextLong();
+		         
+		           System.out.println("Enter your Email id:");
+		           Emailid=s.next();
+		           
+		           System.out.println("Enter your location:");
+		           location=s.next();
+		             
+		           Connection c=DriverManager.getConnection("jdbc:mysql://localhost:3306/productmanagement","root","");
+		           PreparedStatement p=c.prepareStatement("insert into admindetails(Name,Contactno,Emailid,location) values(?,?,?,?)");
+		           p.setString(1,Name);
+		           p.setLong(2,contactno);
+		           p.setString(3, Emailid);
+		           p.setString(4, location);
+		            
+		           int r=p.executeUpdate();
+		           System.out.println(r>0?"data saved":"not saved");
+		           c.close();
+		       }
+		          catch (Exception e)
+		         {
+		          System.out.println(e);
+		         }
+		         
+		 }
+	
+		 public static void main(String  [] args)
+		     {
+		         app a=new app();
+		          a.userdata();
+		     }
+ }
+	
+
+

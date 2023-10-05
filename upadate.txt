@@ -1,0 +1,80 @@
+package productmanagement;
+import java.util.Scanner;
+import java.sql.*;
+
+class updatepgm
+{
+	
+	String Name,Emailid,location;
+	Long contactno;
+	Scanner s= new Scanner(System.in);
+
+	
+	void userdata()
+	{
+		try {
+			System.out.println("Enter the Name:");
+			Name=s.next();
+			Scanner s=new Scanner(System.in);
+	        System.out.println("Enter your contactno:");
+	        contactno=s.nextLong();
+	        System.out.println("Enter your Email id:");
+	        Emailid=s.next();
+	        System.out.println("Enter your location:");
+	           location=s.nextLine();
+	             
+	           Connection c=DriverManager.getConnection("jdbc:mysql://localhost:3306/productmanagement","root","");
+	           PreparedStatement p=c.prepareStatement("update admindetails set name=? where contactno=?");
+	           p.setString(1,Name);
+	           p.setLong(2,contactno);
+	           p.setString(3, Emailid);
+	           p.setString(4, location);
+	            
+	           int r=p.executeUpdate();
+	           System.out.println(r>0?"data update":"not update");
+	           c.close();
+	       }
+	          catch (Exception e)
+	         {
+	          System.out.println(e);
+	         }
+	}
+		void finduser() {
+			
+			
+			try {
+				System.out.println("Enter the Name:");
+				Name=s.next();
+				Connection c=DriverManager.getConnection("jdbc:mysql://localhost:3306/productmanagement","root","");
+		        PreparedStatement p=c.prepareStatement("update admindetails set name=? where contactno=?");
+		        p.setString(1,Name);
+	            ResultSet rs = p.executeQuery();
+		        int r =0;
+		        while(rs.next()) {
+		        	System.out.println("Name:"+rs.getString(1));
+		        	System.out.println("Contactno:"+rs.getString(2));
+		        	System.out.println("Emailid:"+rs.getString(3));
+		        	System.out.println("location:"+rs.getString(4));
+		        	r=1;
+		        }
+			
+		        if(r==0)
+		        {
+		        	System.out.println("invalid name");
+		        }
+			}
+		        catch(Exception e)
+		        {
+		        	System.out.println(e);
+		        }
+		        
+				
+		}
+	
+	   public static void main(String[] args)
+	     {
+		   updatepgm i=new updatepgm();
+		   i.finduser();
+	     }
+
+}

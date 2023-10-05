@@ -1,0 +1,161 @@
+package productmanagement;
+import java.util.Scanner;
+import java.sql.*;
+
+ class productsCRUD {
+	 int id, warrantyperiod, orgprice, offerprice, reviewstar, timeofdelivery; 
+	 String productname,category, family, productcolor, size, manufacturelocation;
+
+	 public void productinsertdata() {
+
+		 try
+
+		 { 
+			 Scanner s = new Scanner(System.in); 
+			 System.out.println( "enetr the product id: "); 
+			 id = s.nextInt(); 
+			 
+			 System.out.println( "enter the productname:"); 
+			 productname = s.next();
+		
+
+		      System.out.println("enter the category:"); 
+		      category= s.next();
+
+		      System.out.println( "enter the name of family:");
+		      family= s.next();
+
+		      System.out.println("enter the name productcolor:"); 
+		      productcolor=s.next();
+		    
+		      System.out.println("enter the size :");
+		      size=s.next();
+		      
+		      System.out.println("enter the manufacturelocation :");
+		      manufacturelocation=s.next();
+		      
+		      System.out.println("enter the warrantyperiod :");
+		      warrantyperiod=s.nextInt();
+		      
+		      System.out.println("enter the orgprice :");
+		      orgprice=s.nextInt();
+		      
+		      System.out.println("enter the offerprice :");
+		      offerprice=s.nextInt();
+		      
+		      System.out.println("enter the reviewstar :");
+		      reviewstar=s.nextInt();
+		      
+		      System.out.println("enter the timeofdelivery :");
+		      timeofdelivery=s.nextInt();
+		      
+		      Connection c=DriverManager.getConnection("jdbc:mysql://localhost:3306/productmanagement","root","");
+		      PreparedStatement p = c.prepareStatement( "insert into productinfo values(?,?,?,?,?,?,?,?,?,?,?,?)");
+
+		      p.setInt(1,id);
+		      p.setString(2, productname);
+		      p.setString(3, category);  
+		      p.setString(4, family);
+		      p.setString(5, productcolor);
+		      p.setString(6, size);
+		      p.setString(7, manufacturelocation);
+		      p.setInt(8, warrantyperiod);
+		      p.setInt(9, orgprice);
+              p.setInt(10, offerprice);
+              p.setInt(11, reviewstar);
+              p.setInt(12, timeofdelivery);
+              
+              int r=p.executeUpdate();
+              System.out.println(r>0?"data saved":"not saved");
+             
+		 }
+		 catch(Exception e) {
+			 System.out.println(e);
+		 }
+	 }
+	 public void productdeletedata() {
+		 Scanner s= new Scanner(System.in);
+		 
+		 try{
+			 
+			 System.out.println("Enter your productName:");
+			 productname=s.next();
+			 Connection c= DriverManager.getConnection("jdbc:mysql://localhost:3306/productmanagement","root","");
+	         PreparedStatement p=c.prepareStatement("delete from procductinfo where productname=?");
+	         p.setString(1,productname);
+	         int r=p.executeUpdate();
+	         System.out.println(r>0?"data delete":"not delete");
+	        
+	     }
+			  catch(Exception e)
+			  {
+				  System.out.println(e);
+			  }
+	 }
+	 
+	 void findproduct() {
+		 Scanner s= new Scanner(System.in);
+		 
+		 try {
+				System.out.println("Enter the productName:");
+				productname=s.next();
+				Connection c=DriverManager.getConnection("jdbc:mysql://localhost:3306/productmanagement","root","");
+		        PreparedStatement p=c.prepareStatement("select*from productinfo  where productname=?");
+		        p.setString(1,productname);
+	            ResultSet rs = p.executeQuery();
+		        int r =0;
+		        while(rs.next()) {
+		        	System.out.println("id:"+rs.getString(1));
+		        	System.out.println("productname:"+rs.getString(2));
+		        	System.out.println("category:"+rs.getString(3));
+		        	System.out.println("family:"+rs.getString(4));
+		        	System.out.println("productcolor:"+rs.getString(5));
+		        	System.out.println("size:"+rs.getString(6));
+		        	System.out.println("manufacturelocation:"+rs.getString(7));
+		        	System.out.println("warrantyperiod:"+rs.getString(8));
+		        	System.out.println("orgprice:"+rs.getString(9));
+		        	System.out.println(" offerprice:"+rs.getString(10));
+		        	System.out.println("reviewstar:"+rs.getString(11));
+		        	System.out.println("timeofdelivery:"+rs.getString(12));
+		        	System.out.println("---------------------------");
+		        	r=1;
+	             }
+		 
+		 if(r==0) {
+			 System.out.println("invalid data");
+		 }
+	} catch(Exception e)
+		 {
+		   System.out.println(e);
+		 }
+	 }
+	public static void main(String[] args)
+	{
+		Scanner s=new Scanner(System.in);
+		productsCRUD p=new productsCRUD();
+		while(true) {
+			System.out.print("1.InsertProduct \n 2.DeleteProduct \n"
+					+ " 3.FindProductdetailes \n 4.Exit \n Select Any One:");
+			int ch=s.nextInt();
+			if(ch==1) {
+				p.productinsertdata();
+			}
+			else if(ch==2)
+			{
+				p.productdeletedata();
+			}else if(ch==3)
+			{
+				p.findproduct();
+			}
+			else if(ch==4) {
+				System.out.println("Thank you!!!");
+				break;
+			}
+			else {
+				System.out.println("Invalid choice");
+			}
+		}
+
+	}
+
+}
